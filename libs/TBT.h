@@ -19,17 +19,19 @@ typedef struct TBT {
 	TBTptr zero;
 } TBT;
 
+TBTptr prevTBTNode(TBTptr pNode);
+
+TBTptr nextTBTNode(TBTptr pNode);
+
+TBTptr getParentOfTBTNode(TBT *pTBT, TBTptr pNode);
+
 TBTptr getInOrderTBTSuccessor(TBT *pTBT, TBTptr pNode);
 
 TBTptr getInOrderTBTPredecessor(TBT *pTBT, TBTptr pNode);
 
-void insertTBTNodeInTBT(TBT *pTBT, int pKey);
-
-void getVacancyPlaceForTBTNodeInTBT(TBT *pTBT, TBTptr *pRoot, TBTptr pNode, int pKey);
-
-TBTptr createTBTNodeInTBT(TBTptr *pRoot, TBTptr pNode, int pKey);
-
 TBTptr createTBT(TBT *pTBT, TBTptr *pRoot, TBTptr pNode, int pKey);
+
+void insertTBTNodeInTBT(TBT *pTBT, int pKey);
 
 void printTBT(TBT *pTBT);
 
@@ -37,19 +39,17 @@ void printTBTInOrderTraversal(TBT *pTBT, TBTptr pNode);
 
 void freeTBT(TBT *pTBT);
 
-TBTptr getTBTNodeInSubTBTByKey(TBT *pTBT, TBTptr pNode, int pKey);
+TBTptr getTBTNodeInSubTBTByKey(TBT *pTBT, TBTptr pRoot, int pKey);
 
 TBTptr getTBTNodeInTBTByKey(TBT *pTBT, int pKey);
 
 TBTptr getMinimalTBTNodeInSubTBT(TBTptr pNode);
 
-TBTptr getMaximalTBTNodeInSubTBT(TBTptr pNode);
-
 TBTptr getMinimalTBTNodeInTBT(TBT *pTBT);
 
-TBTptr getMaximalTBTNodeInTBT(TBT *pTBT);
+TBTptr getMaximalTBTNodeInSubTBT(TBTptr pNode);
 
-TBTptr getParentOfTBTNode(TBT *pTBT, TBTptr pNode);
+TBTptr getMaximalTBTNodeInTBT(TBT *pTBT);
 
 void deleteTBTNodeFromTBT(TBT *pTBT, TBTptr pNode);
 

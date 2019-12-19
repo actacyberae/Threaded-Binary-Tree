@@ -81,7 +81,7 @@ TBTptr getInOrderTBTPredecessor(TBT *pTBT, TBTptr pNode) {
 	return pNode != (pTBT->zero)->right ? pPredecessor : (pTBT->zero)->right;
 }
 
-void threadingTBT(TBTptr pNode, TBTptr pParent, TBT *pTBT) {
+static void threadingTBT(TBTptr pNode, TBTptr pParent, TBT *pTBT) {
 	if (pNode == getMinimalTBTNodeInTBT(pTBT)) {
 		pNode->left = (pTBT->zero)->left;
 	} else {
@@ -94,11 +94,30 @@ void threadingTBT(TBTptr pNode, TBTptr pParent, TBT *pTBT) {
 	}
 }
 
-void insertTBTNodeInTBT(TBT *pTBT, int pKey) {
-	getVacancyPlaceForTBTNodeInTBT(pTBT, &pTBT->root, pTBT->root, pKey);
+static TBTptr createTBTNodeInTBT(TBTptr *pRoot, TBTptr pNode, int pKey) {
+	pNode = *pRoot = (TBTptr) malloc(sizeof(TBTnode));
+	pNode->key = pKey;
+	pNode->lTag = pNode->rTag = 0;
+	return pNode;
 }
 
-void getVacancyPlaceForTBTNodeInTBT(TBT *pTBT, TBTptr *pRoot, TBTptr pNode, int pKey) {
+TBTptr createTBT(TBT *pTBT, TBTptr *pRoot, TBTptr pNode, int pKey) {
+	pNode = createTBTNodeInTBT(pRoot, pNode, pKey);
+	if (pTBT->zero == NULL) {
+		pTBT->zero = malloc(sizeof(TBTnode));
+		(pTBT->zero)->key = -1;
+		(pTBT->zero)->lTag = 1;
+		(pTBT->zero)->rTag = 1;
+		(pTBT->zero)->left = pTBT->root;
+		(pTBT->zero)->right = pTBT->zero;
+	}
+	pNode->right = (pTBT->zero)->right; 
+	pNode->left = (pTBT->zero)->left;
+	pTBT->size++;
+	return pNode;
+}
+
+static void getVacancyPlaceForTBTNodeInTBT(TBT *pTBT, TBTptr *pRoot, TBTptr pNode, int pKey) {
 	TBTptr pParent;
 	
 	if (pNode == NULL) {
@@ -131,27 +150,8 @@ void getVacancyPlaceForTBTNodeInTBT(TBT *pTBT, TBTptr *pRoot, TBTptr pNode, int 
 	}
 }
 
-TBTptr createTBTNodeInTBT(TBTptr *pRoot, TBTptr pNode, int pKey) {
-	pNode = *pRoot = (TBTptr) malloc(sizeof(TBTnode));
-	pNode->key = pKey;
-	pNode->lTag = pNode->rTag = 0;
-	return pNode;
-}
-
-TBTptr createTBT(TBT *pTBT, TBTptr *pRoot, TBTptr pNode, int pKey) {
-	pNode = createTBTNodeInTBT(pRoot, pNode, pKey);
-	if (pTBT->zero == NULL) {
-		pTBT->zero = malloc(sizeof(TBTnode));
-		(pTBT->zero)->key = -1;
-		(pTBT->zero)->lTag = 1;
-		(pTBT->zero)->rTag = 1;
-		(pTBT->zero)->left = pTBT->root;
-		(pTBT->zero)->right = pTBT->zero;
-	}
-	pNode->right = (pTBT->zero)->right; 
-	pNode->left = (pTBT->zero)->left;
-	pTBT->size++;
-	return pNode;
+void insertTBTNodeInTBT(TBT *pTBT, int pKey) {
+	getVacancyPlaceForTBTNodeInTBT(pTBT, &pTBT->root, pTBT->root, pKey);
 }
 
 void printTBT(TBT *pTBT) {
@@ -237,7 +237,7 @@ TBTptr getMaximalTBTNodeInTBT(TBT *pTBT) {
 	return getMaximalTBTNodeInSubTBT(pTBT->root);
 }
 
-void case_A(TBT *pTBT, TBTptr pDeletedNode, TBTptr pParentOfDeletedNode) {
+static void case_A(TBT *pTBT, TBTptr pDeletedNode, TBTptr pParentOfDeletedNode) {
 	if (pDeletedNode != (pTBT->root)) {
 		if (pParentOfDeletedNode->right == pDeletedNode) {
 			pParentOfDeletedNode->right = pDeletedNode->right;
@@ -252,7 +252,7 @@ void case_A(TBT *pTBT, TBTptr pDeletedNode, TBTptr pParentOfDeletedNode) {
 	}
 }
 
-void case_B(TBT *pTBT, TBTptr pDeletedNode, TBTptr pParentOfDeletedNode) {
+static void case_B(TBT *pTBT, TBTptr pDeletedNode, TBTptr pParentOfDeletedNode) {
 	TBTptr pNewNode;
 	TBTptr pMinimalNodeOfTree;
 	TBTptr pMinimalNodeFromRightSubtreeOfDeletedNode;
@@ -283,7 +283,7 @@ void case_B(TBT *pTBT, TBTptr pDeletedNode, TBTptr pParentOfDeletedNode) {
 	}
 }
 
-void case_C(TBT *pTBT, TBTptr pDeletedNode, TBTptr pParentOfDeletedNode) {
+static void case_C(TBT *pTBT, TBTptr pDeletedNode, TBTptr pParentOfDeletedNode) {
 	TBTptr pMinimalNodeOfTree;
 	TBTptr pMinimalNodeFromRightSubtreeOfDeletedNode;
 	TBTptr pParentOfMinimalNodeFromRightSubtreeOfDeletedNode;
