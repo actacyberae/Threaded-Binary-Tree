@@ -73,8 +73,40 @@ print_line(int fd, const void *buf, ...) {
 	len = (size_t) 0;
 	while (msg[len] != '\0') {
 		len = len + (size_t) 1;
-    }
+	}
 	write_msg(fd, msg, len);
 	fflush(NULL);
 	va_end(parameters);
+}
+
+void *
+Calloc(size_t nelem, size_t elsize) {
+	void *array;
+	char explanation[MAXLINE];
+	int errno_saved;
+	
+	errno_saved = errno;
+	errno = 0;
+	if ((array = calloc(nelem, elsize)) == NULL) {
+		err_msg("calloc error: %s", strerror_r(errno, explanation, MAXLINE));
+		errno = errno_saved;
+		exit(EXIT_FAILURE);
+	}
+	return array;
+}
+
+void *
+Malloc(size_t elsize) {
+	void *array;
+	char explanation[MAXLINE];
+	int errno_saved;
+	
+	errno_saved = errno;
+	errno = 0;
+	if ((array = malloc(elsize)) == NULL) {
+		err_msg("calloc error: %s", strerror_r(errno, explanation, MAXLINE));
+		errno = errno_saved;
+		exit(EXIT_FAILURE);
+	}
+	return array;
 }

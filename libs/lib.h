@@ -14,3 +14,7 @@ void err_msg(const char *buf, ...);
 ssize_t write_msg(int fd, char *msg, size_t len);
 
 void print_line(int fd, const void *buf, ...);
+
+void *Calloc(size_t nelem, size_t elsize);
+
+void *Malloc(size_t elsize);
